@@ -6,8 +6,8 @@ stompClient.onConnect = (frame) => {
   setConnected(true);
   console.log('Connected: ' + frame);
   const channelName = $("#channelName").val();
-  stompClient.subscribe(`/chat/in/${channelName}`, (greeting) => {
-    showGreeting(JSON.parse(greeting.body).content);
+  stompClient.subscribe(`/chat/in/${channelName}`, (chat) => {
+    sendChatMessage(JSON.parse(chat.body).content);
   });
 };
 
@@ -28,7 +28,7 @@ function setConnected(connected) {
   } else {
     $("#conversation").hide();
   }
-  $("#greetings").html("");
+  $("#chatting").html("");
 }
 
 function connect() {
@@ -50,8 +50,8 @@ function sendName() {
   });
 }
 
-function showGreeting(message) {
-  $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function sendChatMessage(message) {
+  $("#chatting").append("<tr><td>" + message + "</td></tr>");
 }
 
 $(function () {

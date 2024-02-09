@@ -1,26 +1,20 @@
 package com.example.websocket.controllers
 
+import com.example.websocket.controllers.pojo.ChatMessage
+import com.example.websocket.service.ChatMessageSender
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.stereotype.Controller
 
 @Controller
-class ChatController {
-
+class ChatController(
+    private val chatMessageSender: ChatMessageSender
+) {
     @MessageMapping("/chat/in/{channel}")
-    @SendTo("/chat/out/{channel}")
-    fun greeting(
+    fun receiveChatMessage(
         @DestinationVariable channel: String,
-        message: GreetingMessage
-    ): GreetingMessage {
-        return GreetingMessage("hello world");
+        message: ChatMessage
+    ) {
+        chatMessageSender.receiveChatMessage(channel, message)
     }
-
 }
-
-data class GreetingMessage(
-    val content: String
-)
-
-
